@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import Input from '../components/Input';
 import { createUser } from '../services/userAPI';
+import Loading from '../components/Loading';
 // import PropTypes from 'prop-types';
 
 class Login extends Component {
@@ -10,6 +12,8 @@ class Login extends Component {
     this.state = {
       loginName: '',
       btnDesabled: true,
+      btnUse: true,
+      statePromise: true,
     };
   }
 
@@ -32,9 +36,16 @@ class Login extends Component {
     }
   }
 
-  sendName = () => {
+  sendName = async () => {
     const { loginName } = this.state;
-    createUser({ name: loginName });
+    this.setState({
+      btnUse: false,
+    });
+    await createUser({ name: loginName });
+    this.setState({
+      statePromise: false,
+      btnUse: false,
+    });
   }
 
   handleChange = ({ target }) => {
@@ -43,10 +54,10 @@ class Login extends Component {
     });
   }
 
-  render() {
+  renderPage = () => {
     const { loginName, btnDesabled } = this.state;
     return (
-      <form data-testid="page-login">
+      <form>
         <h2>Página de Login</h2>
         <Input
           id="login-name-input"
@@ -64,7 +75,24 @@ class Login extends Component {
         >
           Entrar
         </button>
-      </form>
+      </form>);
+  }
+
+  renderLoading = () => {
+    const { statePromise } = this.state;
+    return statePromise
+      ? <Loading />
+      : <Redirect to="/search" />;
+  }
+
+  render() {
+    const { btnUse } = this.state;
+    return (
+      <div data-testid="page-login">
+        {btnUse
+          ? this.renderPage()
+          : this.renderLoading()}
+      </div>
     );
   }
 }

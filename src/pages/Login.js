@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import Input from '../components/Input';
 import { createUser } from '../services/userAPI';
 import Loading from '../components/Loading';
+import Button from '../components/Button';
 // import PropTypes from 'prop-types';
 
 class Login extends Component {
@@ -67,14 +68,12 @@ class Login extends Component {
           value={ loginName }
           onInputChange={ this.handleChange }
         />
-        <button
-          type="button"
-          data-testid="login-submit-button"
+        <Button
+          id="login-submit-button"
+          message="Entrar"
           disabled={ btnDesabled }
           onClick={ this.sendName }
-        >
-          Entrar
-        </button>
+        />
       </form>);
   }
 

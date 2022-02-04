@@ -45,7 +45,9 @@ class MusicCard extends Component {
         onLoading: true,
       });
       await removeSong(id);
-      sonsState();
+      if (sonsState !== null) {
+        sonsState();
+      }
       this.setState({
         onLoading: false,
       });

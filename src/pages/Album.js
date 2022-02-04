@@ -74,6 +74,7 @@ class Album extends Component {
                     name={ trackName }
                     id={ trackId }
                     objMusic={ track }
+                    sonsState={ null }
                     favoriteSongs={ favorites[index] }
                     previewUrl={ previewUrl }
                   />

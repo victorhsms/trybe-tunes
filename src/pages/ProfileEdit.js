@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
 import Input from '../components/Input';
@@ -11,6 +12,7 @@ class ProfileEdit extends Component {
 
     this.state = {
       onLoading: true,
+      redirecting: false,
       disabled: true,
       name: '',
       email: '',
@@ -89,6 +91,7 @@ class ProfileEdit extends Component {
     });
     this.setState({
       onLoading: false,
+      redirecting: true,
     });
   }
 
@@ -98,9 +101,16 @@ class ProfileEdit extends Component {
     });
   }
 
+  renderAux = () => {
+    const { redirecting } = this.state;
+    console.log(redirecting);
+    return redirecting ? (<Redirect to="/profile" />) : (<Loading />);
+  }
+
   render() {
     const {
       onLoading,
+      redirecting,
       disabled,
       name,
       email,
@@ -110,7 +120,7 @@ class ProfileEdit extends Component {
     return (
       <div data-testid="page-profile-edit">
         <Header />
-        {onLoading ? <Loading />
+        { onLoading || redirecting ? this.renderAux()
           : (
             <div>
               <p>Página de edição de perfis</p>
@@ -149,7 +159,7 @@ class ProfileEdit extends Component {
               <Button
                 type="submit"
                 message="salvar"
-                data-testid="edit-button-save"
+                id="edit-button-save"
                 disabled={ disabled }
                 onClick={ this.setUserInfos }
               />

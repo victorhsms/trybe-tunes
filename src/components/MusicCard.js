@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { addSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong } from '../services/favoriteSongsAPI';
 import Loading from './Loading';
 import CheckBox from './CheckBox';
 
@@ -41,12 +41,17 @@ class MusicCard extends Component {
     } else {
       this.setState({
         checked: false,
+        onLoading: true,
+      });
+      await removeSong(id);
+      this.setState({
+        onLoading: false,
       });
     }
   }
 
   render() {
-    const { name, previewUrl, id } = this.props;
+    const { name, previewUrl, id, objMusic } = this.props;
     const { onLoading, checked } = this.state;
     return (
       <div>
@@ -66,6 +71,7 @@ class MusicCard extends Component {
                 message="Favorita"
                 id={ `checkbox-music-${id}` }
                 checked={ checked }
+                objMusic={ objMusic }
                 onChange={ this.handleChange }
               />
             </div>
@@ -80,6 +86,7 @@ MusicCard.propTypes = {
   id: PropTypes.string.isRequired,
   previewUrl: PropTypes.string.isRequired,
   favoriteSongs: PropTypes.bool.isRequired,
+  objMusic: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 export default MusicCard;

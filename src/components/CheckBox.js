@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class CheckBox extends Component {
   render() {
-    const { message, id, type = 'checkbox', onChange, checked } = this.props;
+    const { message, id, type = 'checkbox', onChange, checked, objMusic } = this.props;
     return (
       <label htmlFor={ id }>
         { message }
@@ -12,7 +12,7 @@ class CheckBox extends Component {
           id={ id }
           data-testid={ id }
           checked={ checked }
-          onChange={ () => onChange(id) }
+          onChange={ () => onChange(objMusic) }
         />
       </label>
     );
@@ -25,6 +25,7 @@ CheckBox.propTypes = {
   type: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
   onChange: PropTypes.func.isRequired,
+  objMusic: PropTypes.objectOf(PropTypes.object).isRequired,
 };
 
 export default CheckBox;

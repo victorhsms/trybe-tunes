@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
+import Loading from '../components/Loading';
+import { getFavoriteSongs } from '../services/favoriteSongsAPI';
 
 class Album extends Component {
   constructor() {
@@ -11,6 +13,8 @@ class Album extends Component {
     this.state = {
       album: {},
       music: [],
+      favorites: [],
+      onLoading: true,
     };
   }
 
@@ -18,6 +22,7 @@ class Album extends Component {
     const { match } = this.props;
     const { id } = match.params;
     this.searchAlbum(id);
+    this.getFavorites();
   }
 
   searchAlbum = async (id) => {
@@ -30,25 +35,50 @@ class Album extends Component {
     });
   }
 
+  setFavorites = (favorites) => {
+    const { music } = this.state;
+    const idMusics = music.map((track) => track.trackId);
+    const favoriteSongs = idMusics.map((id) => favorites.some((favoriteMusic) => {
+      const idTrack = `checkbox-music-${id}`;
+      return idTrack === favoriteMusic;
+    }));
+    this.setState({
+      favorites: favoriteSongs,
+    });
+  }
+
+  getFavorites = async () => {
+    const favorites = await getFavoriteSongs();
+    this.setFavorites(favorites);
+    this.setState({
+      onLoading: false,
+    });
+  }
+
   render() {
-    const { album, music } = this.state;
-    console.log(album, music);
+    const { album, music, onLoading, favorites } = this.state;
     return (
       <div data-testid="page-album">
-        <Header />
-        <h2 data-testid="artist-name">{ album.artistName }</h2>
-        <p data-testid="album-name">{ album.collectionName }</p>
-        {music.map((track) => {
-          const { trackName, previewUrl, trackId } = track;
-          return (
-            <MusicCard
-              key={ previewUrl }
-              name={ trackName }
-              id={ trackId }
-              previewUrl={ previewUrl }
-            />
-          );
-        })}
+        {onLoading ? <Loading />
+          : (
+            <div>
+              <Header />
+              <h2 data-testid="artist-name">{ album.artistName }</h2>
+              <p data-testid="album-name">{ album.collectionName }</p>
+              {music.map((track, index) => {
+                const { trackName, previewUrl, trackId } = track;
+                return (
+                  <MusicCard
+                    key={ previewUrl }
+                    name={ trackName }
+                    id={ trackId }
+                    favoriteSongs={ favorites[index] }
+                    previewUrl={ previewUrl }
+                  />
+                );
+              })}
+            </div>
+          )}
       </div>
     );
   }

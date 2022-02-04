@@ -14,6 +14,18 @@ class MusicCard extends Component {
     };
   }
 
+  componentDidMount() {
+    this.setInitialCheck();
+  }
+
+  setInitialCheck = () => {
+    const { favoriteSongs } = this.props;
+
+    this.setState({
+      checked: favoriteSongs,
+    });
+  }
+
   handleChange = async (id) => {
     const { checked } = this.state;
 
@@ -67,6 +79,7 @@ MusicCard.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   previewUrl: PropTypes.string.isRequired,
+  favoriteSongs: PropTypes.bool.isRequired,
 };
 
 export default MusicCard;

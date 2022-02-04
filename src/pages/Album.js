@@ -39,11 +39,12 @@ class Album extends Component {
         <h2 data-testid="artist-name">{ album.artistName }</h2>
         <p data-testid="album-name">{ album.collectionName }</p>
         {music.map((track) => {
-          const { trackName, previewUrl } = track;
+          const { trackName, previewUrl, trackId } = track;
           return (
             <MusicCard
               key={ previewUrl }
               name={ trackName }
+              id={ trackId }
               previewUrl={ previewUrl }
             />
           );

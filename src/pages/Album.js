@@ -39,9 +39,8 @@ class Album extends Component {
     const { music } = this.state;
     const idMusics = music.map((track) => track.trackId);
     const favoriteSongs = idMusics.map((id) => favorites.some((favoriteMusic) => {
-      const idTrack = `checkbox-music-${id}`;
-      const favoriteTrack = `checkbox-music-${favoriteMusic.trackId}`;
-      return idTrack === favoriteTrack;
+      const favoriteTrack = favoriteMusic.trackId;
+      return id === favoriteTrack;
     }));
     console.log(favoriteSongs);
     this.setState({

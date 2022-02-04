@@ -28,6 +28,7 @@ class MusicCard extends Component {
 
   handleChange = async (id) => {
     const { checked } = this.state;
+    const { sonsState } = this.props;
 
     if (checked === false) {
       this.setState({
@@ -44,6 +45,7 @@ class MusicCard extends Component {
         onLoading: true,
       });
       await removeSong(id);
+      sonsState();
       this.setState({
         onLoading: false,
       });
@@ -81,12 +83,17 @@ class MusicCard extends Component {
   }
 }
 
+MusicCard.defaultProps = {
+  sonsState: null,
+};
+
 MusicCard.propTypes = {
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   previewUrl: PropTypes.string.isRequired,
   favoriteSongs: PropTypes.bool.isRequired,
   objMusic: PropTypes.objectOf(PropTypes.object).isRequired,
+  sonsState: PropTypes.func,
 };
 
 export default MusicCard;
